@@ -11,7 +11,10 @@ public class GoalController : MonoBehaviour
      public Transform _playerTransform;
     [SerializeField] private Vector3 _enemyPosition;
     private bool _playerAlreadyHit = false;
-    private bool _enemyAlreadyHit = false;
+    [SerializeField] private bool _enemyAlreadyHit = false;
+    private int _playerHits;
+    private int _enemyHits;
+    
     
     
     public static event Action<int> getHit;
@@ -22,16 +25,39 @@ public class GoalController : MonoBehaviour
     {
         
         _scoreZone = GetComponent<BoxCollider>();
+        _playerHits = _enemyHits = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (_scoreZone.bounds.Contains(_playerTransform.position) && !_playerAlreadyHit)
+        
+    }
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Player Hit");
-            _playerAlreadyHit = true;
+            _playerHits++;
+            if (_playerHits == 3 && !_playerAlreadyHit)
+            {
+                Debug.Log("Player Hit");
+                _playerAlreadyHit = true;
+            }
         }
-        else _playerAlreadyHit = false;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            _playerHits--;
+            if (_playerHits == 0) _playerAlreadyHit = false;
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        
     }
 }
