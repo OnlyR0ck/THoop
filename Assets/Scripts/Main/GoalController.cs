@@ -9,7 +9,7 @@ public class GoalController : MonoBehaviour
 
     private bool _playerAlreadyHit = false;
     private bool _enemyAlreadyHit = false;
-    private int _playerHits;
+    [SerializeField]private int _playerHits;
     private int _enemyHits;
     
     public static event Action<bool> getHit;
@@ -31,14 +31,15 @@ public class GoalController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         //When the player hits goal event invoked with a true parameter, else with false
-        
         if (other.gameObject.CompareTag("Player"))
         {
             _playerHits++;
             if (_playerHits == 3 && !_playerAlreadyHit)
             {
                 Debug.Log("Player Hit");
-                _playerAlreadyHit = true;
+                //_playerAlreadyHit = true;
+                this.gameObject.SetActive(false);
+                _playerHits = 0;
                 getHit?.Invoke(true);
             }
         }
@@ -48,6 +49,7 @@ public class GoalController : MonoBehaviour
             if (_enemyHits == 3 && !_enemyAlreadyHit)
             {
                 Debug.Log("Enemy Hit");
+                this.gameObject.SetActive(false);
                 _enemyAlreadyHit = true;
                 getHit?.Invoke(false);
             }

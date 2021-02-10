@@ -8,26 +8,29 @@ public class PlayerController : MonoBehaviour
     #region Fields
 
     private Vector3 _mousePosition;
-    private Rigidbody _playerRigidbody;
-    private Collider[] _colliders;
+    private Rigidbody _playerRigidbody; 
     [Range(1, 20)][SerializeField] private float _jumpPower;
     private float _middleOfTheScreen;
     private short _directionUnit;
-    private bool _playerAlreadyHit = false;
-    
 
     #endregion
     
+    #region Initialization
+
     void Start()
     {
         _playerRigidbody = GetComponent<Rigidbody>();
         _middleOfTheScreen = Screen.width / 2;
     }
 
+
+    #endregion
+
+    #region PlayerMovement
+
     void Update()
     {
         Movement();
-        //CheckIfInsideSphere();
     }
 
     void Movement()
@@ -50,20 +53,5 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void CheckIfInsideSphere()
-    {
-        _colliders = Physics.OverlapSphere(transform.position, 0.0f);
-        foreach (var collider in _colliders)
-        {
-            if (collider.tag.Equals("Goal") && !_playerAlreadyHit)
-            {
-                Debug.Log("Player Hit");
-                _playerAlreadyHit = true;
-            }
-            else
-            {
-                _playerAlreadyHit = false;
-            }
-        }
-    }
+    #endregion
 }

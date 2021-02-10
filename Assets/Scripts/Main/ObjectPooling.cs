@@ -30,7 +30,7 @@ public class ObjectPooling : MonoBehaviour
 
     #region GetObjectMethod
 
-    public GameObject GetOre()
+    public GameObject GetSphere()
     {
         for (int i = 0; i < amountPool; i++)
         {
