@@ -7,35 +7,31 @@ public class GoalController : MonoBehaviour
 {
     #region Fields
 
-    private BoxCollider _scoreZone;
-     public Transform _playerTransform;
-    [SerializeField] private Vector3 _enemyPosition;
     private bool _playerAlreadyHit = false;
-    [SerializeField] private bool _enemyAlreadyHit = false;
+    private bool _enemyAlreadyHit = false;
     private int _playerHits;
     private int _enemyHits;
     
-    
-    
-    public static event Action<int> getHit;
+    public static event Action<bool> getHit;
 
 
     #endregion
+
+    #region Initialization
+
     void Start()
     {
-        
-        _scoreZone = GetComponent<BoxCollider>();
         _playerHits = _enemyHits = 0;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    #endregion
+
+    #region TrackHits
     
     private void OnTriggerEnter(Collider other)
     {
+        //When the player hits goal event invoked with a true parameter, else with false
+        
         if (other.gameObject.CompareTag("Player"))
         {
             _playerHits++;
@@ -43,6 +39,17 @@ public class GoalController : MonoBehaviour
             {
                 Debug.Log("Player Hit");
                 _playerAlreadyHit = true;
+                getHit?.Invoke(true);
+            }
+        }
+        else if (other.gameObject.CompareTag("Enemy"))
+        {
+            _enemyHits++;
+            if (_enemyHits == 3 && !_enemyAlreadyHit)
+            {
+                Debug.Log("Enemy Hit");
+                _enemyAlreadyHit = true;
+                getHit?.Invoke(false);
             }
         }
     }
@@ -54,10 +61,12 @@ public class GoalController : MonoBehaviour
             _playerHits--;
             if (_playerHits == 0) _playerAlreadyHit = false;
         }
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            _enemyHits--;
+            if (_enemyHits == 0) _enemyAlreadyHit = false;
+        }
     }
-
-    private void OnTriggerStay(Collider other)
-    {
-        
-    }
+    
+    #endregion
 }
