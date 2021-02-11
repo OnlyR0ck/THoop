@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Random = System.Random;
 
 public class SceneController : MonoBehaviour
@@ -72,5 +73,14 @@ public class SceneController : MonoBehaviour
         Instantiate(playerPrefab, _playerSpawnPosition, playerPrefab.transform.rotation);
         Instantiate(enemyPrefab, _enemySpawnPosition, enemyPrefab.transform.rotation);
     }
+    #endregion
+
+    #region LoadNextScene
+
+    public void LoadAnotherLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
     #endregion
 }

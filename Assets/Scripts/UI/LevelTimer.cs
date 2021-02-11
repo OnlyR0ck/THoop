@@ -14,7 +14,7 @@ public class LevelTimer : MonoBehaviour
     private TextMeshProUGUI _timerText;
     
     //Events
-    public static event Action timerEnded;
+    public static event Action TimerEnded;
     
     //Properties
     public int Minutes 
@@ -89,7 +89,7 @@ public class LevelTimer : MonoBehaviour
             _seconds--;
             UpdateTimerText();
         }
-        timerEnded?.Invoke();
+        TimerEnded?.Invoke();
     }
 
     #endregion
