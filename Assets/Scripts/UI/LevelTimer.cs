@@ -1,18 +1,113 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class LevelTimer : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    #region Fields
+    
+    [SerializeField][Range(0, 59)] private int _minutes;
+    [SerializeField][Range(0, 59)] private int _seconds;
+
+    private TextMeshProUGUI _timerText;
+    
+    //Events
+    public static event Action timerEnded;
+    
+    //Properties
+    public int Minutes 
+    {
+        get => _minutes;
+
+        set
+        {
+            if (value > 0 && value < 60)
+            {
+                _minutes = value;
+            }
+        }
+        
+    }
+    public int Seconds
+    {
+        get => _seconds;
+        set
+        {
+            if (value > 0 && value < 60)
+            {
+                _seconds = value;
+            }
+        }
+    }
+
+    #endregion
+
+    #region Initialization
+
+    private void Start()
+    {
+        
+        _timerText = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        StartCoroutine(StartTimer());
+    }
+
+    #endregion
+    
+    #region OnEnable
+
+    private void OnEnable()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    #endregion
+
+    #region OnDisable
+
+    private void OnDisable()
     {
         
     }
+
+    #endregion
+
+    #region TimerCoroutine
+
+    IEnumerator StartTimer()
+    {
+        while (_minutes > 0 || _seconds > 0)
+        {
+            yield return new WaitForSeconds(1);
+            if (_seconds == 0)
+            {
+                _minutes--;
+                _seconds = 59;
+                UpdateTimerText();
+            }
+            _seconds--;
+            UpdateTimerText();
+        }
+        timerEnded?.Invoke();
+    }
+
+    #endregion
+
+    #region TimerText
+
+    void UpdateTimerText()
+    {
+        if (_minutes < 10)
+        {
+            _timerText.text = _seconds < 10 ? $"0{_minutes}:0{_seconds}" : $"0{_minutes}:{_seconds}";
+        }
+        else
+        {
+            _timerText.text = _seconds < 10 ? $"{_minutes}:0{_seconds}" : $"{_minutes}:{_seconds}";
+
+        }
+    }
+
+    #endregion
 }
