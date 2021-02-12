@@ -19,11 +19,13 @@ public class LabelController : MonoBehaviour
     private void OnEnable()
     {
         GameManager.LevelChanged += SetWinner;
+        GameManager.BonusLevelEnded += BonusLevel;
     }
 
     private void OnDisable()
     {
         GameManager.LevelChanged -= SetWinner;
+        GameManager.BonusLevelEnded -= BonusLevel;
     }
 
     //if winner equals true - player win, else enemy
@@ -41,5 +43,12 @@ public class LabelController : MonoBehaviour
             _winText.color = new Color(1f, 0f, 0f, 1f);
             _winText.text = "LOSE!";
         }
+    }
+
+    private void BonusLevel()
+    {
+        _background.color = new Color(0.9f, 0.16f, 0.71f, 0.16f);
+        _winText.color = new Color(0.9f, 0.16f, 0.71f, 1f);
+        _winText.text = "COMPLETED!"; 
     }
 }

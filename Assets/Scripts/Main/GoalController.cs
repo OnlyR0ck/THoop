@@ -38,8 +38,13 @@ public class GoalController : MonoBehaviour
             {
                 Debug.Log("Player Hit");
                 _playerAlreadyHit = true;
-                //_playerHits = 0;
                 getHit?.Invoke(true);
+                if (GameManager.isBonusLevel)
+                {
+                    _playerHits = 0;
+                    _playerAlreadyHit = false;
+                    this.gameObject.SetActive(false);
+                }
             }
         }
         else if (other.gameObject.CompareTag("Enemy"))
@@ -48,16 +53,16 @@ public class GoalController : MonoBehaviour
             if (_enemyHits == 3 && !_enemyAlreadyHit)
             {
                 Debug.Log("Enemy Hit");
-                //_enemyHits = 0;
                 _enemyAlreadyHit = true;
                 getHit?.Invoke(false);
+                if (GameManager.isBonusLevel)
+                {
+                    this.gameObject.SetActive(false);
+                }
             }
         }
 
-        if (GameManager.isBonusLevel)
-        {
-            this.gameObject.SetActive(false);
-        }
+       
     }
 
     private void OnTriggerExit(Collider other)

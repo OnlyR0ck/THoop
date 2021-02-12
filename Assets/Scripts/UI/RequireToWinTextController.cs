@@ -44,6 +44,7 @@ public class RequireToWinTextController : MonoBehaviour
     void SetText(int number)
     {
         _requireToWinText.text = $"{number}";
+        gameObject.SetActive(true);
     }
 
     #endregion

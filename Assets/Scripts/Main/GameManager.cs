@@ -9,28 +9,40 @@ public class GameManager : MonoBehaviour
 
     private int _playerScore;
     private int _enemyScore;
+    private int _playerMoney;
     public static bool isBonusLevel = false;
-    public static readonly int requireToBonusLevel;
-    public static int playerWinsCount;
+    [SerializeField] private int requireToBonusLevel;
+    [SerializeField] private int playerWinsCount;
 
+    [SerializeField] private int _pointsWhenBonus;
     [SerializeField] [Range(1, 20)] private int _requireToWin;
     public static event Action<bool, int> scoreChanged;
     public static event Action<bool> LevelChanged;
     public static event Action<int> LevelStarted;
+    public static event Action LastGoal;
+    public static event Action BonusLevelEnded;
 
     #endregion
 
     #region Initialization
 
+    private void Awake()
+    {
+        //LoadProgress
+        //PlayerPrefs.DeleteAll();
+        playerWinsCount = PlayerPrefs.GetInt("playerWins", 0);
+        _playerMoney = PlayerPrefs.GetInt("Money", 0);
+        
+        //Check if the level is bonus now
+        isBonusLevel = playerWinsCount == requireToBonusLevel;
+    }
+
     void Start()
     {
         _playerScore = _enemyScore = 0;
-        
-        //LoadProgress
-        playerWinsCount = PlayerPrefs.GetInt("playerWins", 0);
-        
+
         //Set Points Require To Win
-        LevelStarted?.Invoke(_requireToWin);
+        if(!isBonusLevel) LevelStarted?.Invoke(_requireToWin);
         
     }
 
@@ -62,14 +74,23 @@ public class GameManager : MonoBehaviour
    {
        if (winner)
        {
-           _playerScore++;
-           scoreChanged?.Invoke(winner, _playerScore);
-           if (_playerScore == _requireToWin)
+           if (!isBonusLevel)
            {
-               playerWinsCount++;
-               PlayerPrefs.SetInt("playerWins", playerWinsCount);
-               LevelChanged?.Invoke(true);
+               _playerScore++;
+               if (_playerScore == _requireToWin)
+               {
+                   playerWinsCount++;
+                   PlayerPrefs.SetInt("playerWins", playerWinsCount);
+                   LastGoal?.Invoke();
+                   LevelChanged?.Invoke(true);
+               }
            }
+           else
+           {
+               _playerScore += 3;
+           }
+           scoreChanged?.Invoke(winner, _playerScore);
+
        }
        else
        {
@@ -77,6 +98,7 @@ public class GameManager : MonoBehaviour
            scoreChanged?.Invoke(winner, _enemyScore);
            if (_enemyScore == _requireToWin)
            {
+               LastGoal?.Invoke();
                LevelChanged?.Invoke(false);
            }
 
@@ -89,13 +111,26 @@ public class GameManager : MonoBehaviour
 
    void ChangeLevelWhenTimeIsUp()
    {
-       if (_playerScore > _enemyScore)
+       if (!isBonusLevel)
        {
-           LevelChanged?.Invoke(true);
+           if (_playerScore > _enemyScore)
+           {
+               playerWinsCount++;
+               PlayerPrefs.SetInt("playerWins", playerWinsCount);
+               LevelChanged?.Invoke(true);
+           }
+           else
+           {
+               LevelChanged?.Invoke(false);
+           }
        }
        else
        {
-           LevelChanged?.Invoke(false);
+           _playerMoney += _playerScore;
+           PlayerPrefs.SetInt("Money", _playerMoney);
+           playerWinsCount = 0;
+           PlayerPrefs.SetInt("playerWins", playerWinsCount);
+           BonusLevelEnded?.Invoke();
        }
    }
 

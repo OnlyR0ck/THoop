@@ -90,15 +90,7 @@ public class SceneController : MonoBehaviour
 
     public void LoadAnotherLevel()
     {
-        if (GameManager.playerWinsCount == GameManager.requireToBonusLevel)
-        {
-            GameManager.playerWinsCount = 0;
-            //LoadScene
-        }
-        else
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     #endregion

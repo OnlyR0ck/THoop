@@ -17,6 +17,7 @@ public class UpdateEnemyScore : MonoBehaviour
     {
         _enemyTextScore = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         _enemyTextRectTransform = transform.GetChild(0).GetComponent<RectTransform>();
+        if (GameManager.isBonusLevel) gameObject.SetActive(false);
     }
 
     private void OnEnable()

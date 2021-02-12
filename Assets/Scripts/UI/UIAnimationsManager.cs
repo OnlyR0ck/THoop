@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using TMPro;
 
 
 public class UIAnimationsManager : MonoBehaviour
 {
     #region Fields
 
-    public RectTransform endScreen;
+    private RectTransform _endScreen;
     private Vector2 _endScreenStartPosition;
 
     #endregion
@@ -18,7 +19,8 @@ public class UIAnimationsManager : MonoBehaviour
     #region Initialization
     private void Start()
     {
-        _endScreenStartPosition = endScreen.anchoredPosition;
+        _endScreen = GameObject.Find("EndScreen").GetComponent<RectTransform>();
+        _endScreenStartPosition = _endScreen.anchoredPosition;
     }
     
     #endregion
@@ -27,7 +29,8 @@ public class UIAnimationsManager : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.LevelChanged += ShowEndScreen;
+        GameManager.LevelChanged += Show_endScreen;
+        GameManager.BonusLevelEnded += ShowBonusScreen;
     }
 
     #endregion
@@ -35,21 +38,29 @@ public class UIAnimationsManager : MonoBehaviour
     #region OnDisable
     private void OnDisable()
     {
-        GameManager.LevelChanged -= ShowEndScreen;
+        GameManager.LevelChanged -= Show_endScreen;
+        GameManager.BonusLevelEnded -= ShowBonusScreen;
+
     }
     #endregion
 
     #region Animations
-    private void ShowEndScreen(bool winner)
+    private void Show_endScreen(bool winner)
     {
-        endScreen.gameObject.SetActive(true);
-        endScreen.DOAnchorPos(Vector2.zero, 0.25f);
+        _endScreen.gameObject.SetActive(true);
+        _endScreen.DOAnchorPos(Vector2.zero, 0.25f).SetUpdate(true);
+    }
+    
+    private void ShowBonusScreen()
+    {
+        _endScreen?.gameObject.SetActive(true);
+        _endScreen?.DOAnchorPos(Vector2.zero, 0.25f).SetUpdate(true);
     }
 
-    public void HideEndScreen()
+    public void Hide_endScreen()
     {
-        endScreen.DOAnchorPos(_endScreenStartPosition, 0.25f);
-        endScreen.gameObject.SetActive(false);
+        _endScreen.DOAnchorPos(_endScreenStartPosition, 0.25f).SetUpdate(true);
+        _endScreen.gameObject.SetActive(false);
     }
     #endregion
 }

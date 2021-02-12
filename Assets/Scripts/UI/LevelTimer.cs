@@ -50,28 +50,18 @@ public class LevelTimer : MonoBehaviour
     {
         
         _timerText = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        
+        if (GameManager.isBonusLevel)
+        {
+            _minutes = 0;
+            _seconds = 10;
+        }
+        
         StartCoroutine(StartTimer());
     }
 
     #endregion
     
-    #region OnEnable
-
-    private void OnEnable()
-    {
-        
-    }
-
-    #endregion
-
-    #region OnDisable
-
-    private void OnDisable()
-    {
-        
-    }
-
-    #endregion
 
     #region TimerCoroutine
 
