@@ -9,8 +9,10 @@ public class GameManager : MonoBehaviour
 
     private int _playerScore;
     private int _enemyScore;
-    private bool _isBonusLevel;
-    private int playerWinsCount;
+    public static bool isBonusLevel = false;
+    public static readonly int requireToBonusLevel;
+    public static int playerWinsCount;
+
     [SerializeField] [Range(1, 20)] private int _requireToWin;
     public static event Action<bool, int> scoreChanged;
     public static event Action<bool> LevelChanged;
@@ -23,7 +25,13 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         _playerScore = _enemyScore = 0;
+        
+        //LoadProgress
+        playerWinsCount = PlayerPrefs.GetInt("playerWins", 0);
+        
+        //Set Points Require To Win
         LevelStarted?.Invoke(_requireToWin);
+        
     }
 
     #endregion
@@ -58,6 +66,8 @@ public class GameManager : MonoBehaviour
            scoreChanged?.Invoke(winner, _playerScore);
            if (_playerScore == _requireToWin)
            {
+               playerWinsCount++;
+               PlayerPrefs.SetInt("playerWins", playerWinsCount);
                LevelChanged?.Invoke(true);
            }
        }

@@ -37,9 +37,8 @@ public class GoalController : MonoBehaviour
             if (_playerHits == 3 && !_playerAlreadyHit)
             {
                 Debug.Log("Player Hit");
-                //_playerAlreadyHit = true;
-                this.gameObject.SetActive(false);
-                _playerHits = 0;
+                _playerAlreadyHit = true;
+                //_playerHits = 0;
                 getHit?.Invoke(true);
             }
         }
@@ -49,10 +48,15 @@ public class GoalController : MonoBehaviour
             if (_enemyHits == 3 && !_enemyAlreadyHit)
             {
                 Debug.Log("Enemy Hit");
-                this.gameObject.SetActive(false);
+                //_enemyHits = 0;
                 _enemyAlreadyHit = true;
                 getHit?.Invoke(false);
             }
+        }
+
+        if (GameManager.isBonusLevel)
+        {
+            this.gameObject.SetActive(false);
         }
     }
 

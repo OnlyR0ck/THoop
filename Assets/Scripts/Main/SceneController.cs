@@ -45,7 +45,7 @@ public class SceneController : MonoBehaviour
     void Start()
     {
         _pool = GetComponent<ObjectPooling>();
-        SpawnSphere(true);
+        SpawnSphereAtTheStart();
         SpawnPlayers();
 
     }
@@ -55,10 +55,18 @@ public class SceneController : MonoBehaviour
     #region Spawners
     void SpawnSphere(bool winner)
     {
-        Vector3 spawnPosition = GetSpawnPosition();
-        _spherePrefab = _pool.GetSphere();
-        _spherePrefab.transform.position = spawnPosition;
+        if (GameManager.isBonusLevel)
+        {
+            _spherePrefab = _pool.GetSphere();
+            _spherePrefab.transform.position = GetSpawnPosition();
+            _spherePrefab.SetActive(true);
+        }
+    }
 
+    void SpawnSphereAtTheStart()
+    {
+        _spherePrefab = _pool.GetSphere();
+        _spherePrefab.transform.position = Vector3.zero;
         _spherePrefab.SetActive(true);
     }
 
@@ -71,7 +79,10 @@ public class SceneController : MonoBehaviour
     void SpawnPlayers()
     {
         Instantiate(playerPrefab, _playerSpawnPosition, playerPrefab.transform.rotation);
-        Instantiate(enemyPrefab, _enemySpawnPosition, enemyPrefab.transform.rotation);
+        if (!GameManager.isBonusLevel)
+        {
+            Instantiate(enemyPrefab, _enemySpawnPosition, enemyPrefab.transform.rotation);
+        }
     }
     #endregion
 
@@ -79,7 +90,15 @@ public class SceneController : MonoBehaviour
 
     public void LoadAnotherLevel()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        if (GameManager.playerWinsCount == GameManager.requireToBonusLevel)
+        {
+            GameManager.playerWinsCount = 0;
+            //LoadScene
+        }
+        else
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 
     #endregion
