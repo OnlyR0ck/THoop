@@ -9,9 +9,12 @@ public class GameManager : MonoBehaviour
 
     private int _playerScore;
     private int _enemyScore;
+    private bool _isBonusLevel;
+    private int playerWinsCount;
     [SerializeField] [Range(1, 20)] private int _requireToWin;
     public static event Action<bool, int> scoreChanged;
     public static event Action<bool> LevelChanged;
+    public static event Action<int> LevelStarted;
 
     #endregion
 
@@ -20,6 +23,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         _playerScore = _enemyScore = 0;
+        LevelStarted?.Invoke(_requireToWin);
     }
 
     #endregion
