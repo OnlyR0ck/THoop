@@ -13,6 +13,7 @@ public class UIAnimationsManager : MonoBehaviour
 
     private RectTransform _endScreen;
     private Vector2 _endScreenStartPosition;
+    [SerializeField] private float _delay;
 
     #endregion
     
@@ -29,7 +30,7 @@ public class UIAnimationsManager : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.LevelChanged += Show_endScreen;
+        GameManager.LevelChanged += ShowEndScreen;
         GameManager.BonusLevelEnded += ShowBonusScreen;
     }
 
@@ -38,26 +39,39 @@ public class UIAnimationsManager : MonoBehaviour
     #region OnDisable
     private void OnDisable()
     {
-        GameManager.LevelChanged -= Show_endScreen;
+        GameManager.LevelChanged -= ShowEndScreen;
         GameManager.BonusLevelEnded -= ShowBonusScreen;
 
     }
     #endregion
 
     #region Animations
-    private void Show_endScreen(bool winner)
+
+    void ShowEndScreen(bool screen)
     {
+        StartCoroutine(ShowEndScreenCoroutine());
+    }
+    
+    private IEnumerator ShowEndScreenCoroutine()
+    {
+        yield return new WaitForSecondsRealtime(_delay);
         _endScreen.gameObject.SetActive(true);
         _endScreen.DOAnchorPos(Vector2.zero, 0.25f).SetUpdate(true);
     }
-    
+
     private void ShowBonusScreen()
     {
+        StartCoroutine(ShowBonusScreenCoroutine());
+    }
+    
+    private IEnumerator ShowBonusScreenCoroutine()
+    {
+        yield return new WaitForSecondsRealtime(_delay);
         _endScreen?.gameObject.SetActive(true);
         _endScreen?.DOAnchorPos(Vector2.zero, 0.25f).SetUpdate(true);
     }
 
-    public void Hide_endScreen()
+    public void HideEndScreen()
     {
         _endScreen.DOAnchorPos(_endScreenStartPosition, 0.25f).SetUpdate(true);
         _endScreen.gameObject.SetActive(false);

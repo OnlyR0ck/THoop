@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] [Range(1, 20)] private int _requireToWin;
     public static event Action<bool, int> scoreChanged;
     public static event Action<bool> LevelChanged;
-    public static event Action<int> LevelStarted;
+    public static event Action<int, bool> LevelStarted;
     public static event Action LastGoal;
     public static event Action BonusLevelEnded;
 
@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
         _playerScore = _enemyScore = 0;
 
         //Set Points Require To Win
-        if(!isBonusLevel) LevelStarted?.Invoke(_requireToWin);
+        if(!isBonusLevel) LevelStarted?.Invoke(_requireToWin, isBonusLevel);
         
     }
 

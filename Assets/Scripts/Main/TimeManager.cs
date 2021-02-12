@@ -35,11 +35,14 @@ public class TimeManager : MonoBehaviour
 
     IEnumerator SlowTimeCoroutine()
     {
-        while (Time.timeScale > 0)
+        while (Time.timeScale > 0.00000001f)
         {
-            Time.timeScale -= _slowdownFactor;
-            yield return new WaitForSeconds(_speedOfTimeChange);
+            Time.timeScale /= _slowdownFactor;
+            yield return new WaitForSecondsRealtime(_speedOfTimeChange);
         }
+
+        yield return new WaitForSecondsRealtime(2);
+        Time.timeScale = 0;
     }
     
 }

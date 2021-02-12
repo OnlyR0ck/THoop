@@ -53,8 +53,8 @@ public class LevelTimer : MonoBehaviour
         
         if (GameManager.isBonusLevel)
         {
-            _minutes = 0;
-            _seconds = 10;
+            _minutes = 1;
+            _seconds = 0;
         }
         
         StartCoroutine(StartTimer());
