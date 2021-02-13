@@ -6,15 +6,24 @@ using UnityEngine.UI;
 using TMPro;
 public class LabelController : MonoBehaviour
 {
+    #region Fields
+
     private Image _background;
     private TextMeshProUGUI _winText;
+
+    #endregion
     
-    // Start is called before the first frame update
+    #region Initialization
+
     void Start()
     {
         _background = transform.GetChild(0).GetComponent<Image>();
         _winText = transform.GetChild(1).GetComponent<TextMeshProUGUI>();
     }
+
+    #endregion
+
+    #region OnEnable
 
     private void OnEnable()
     {
@@ -22,12 +31,20 @@ public class LabelController : MonoBehaviour
         GameManager.BonusLevelEnded += BonusLevel;
     }
 
+    #endregion
+
+    #region OnDisable
+
     private void OnDisable()
     {
         GameManager.LevelChanged -= SetWinner;
         GameManager.BonusLevelEnded -= BonusLevel;
     }
 
+    #endregion
+
+    #region EndScreenControls
+    
     //if winner equals true - player win, else enemy
     private void SetWinner(bool winner)
     {
@@ -51,4 +68,6 @@ public class LabelController : MonoBehaviour
         _winText.color = new Color(0.9f, 0.16f, 0.71f, 1f);
         _winText.text = "COMPLETED!"; 
     }
+    
+    #endregion
 }

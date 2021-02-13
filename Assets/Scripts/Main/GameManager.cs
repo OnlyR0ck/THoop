@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     private int _playerScore;
     private int _enemyScore;
     private int _playerMoney;
-    public static bool isBonusLevel = false;
+    public static bool isBonusLevel;
     [SerializeField] private int requireToBonusLevel;
     [SerializeField] private int playerWinsCount;
 

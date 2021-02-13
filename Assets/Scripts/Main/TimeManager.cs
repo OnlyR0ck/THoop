@@ -5,9 +5,15 @@ using UnityEngine;
 
 public class TimeManager : MonoBehaviour
 {
+    #region Fields
+
     [SerializeField] private float _slowdownFactor;
     [SerializeField] [Range(0f, 1f)] private float _speedOfTimeChange;
     [SerializeField] private float _fixedDeltaTime;
+
+    #endregion
+
+    #region Initialization
 
     private void Start()
     {
@@ -15,11 +21,19 @@ public class TimeManager : MonoBehaviour
         Time.fixedDeltaTime = 0.02f;
     }
 
+    #endregion
+
+    #region OnEnable
+
     private void OnEnable()
     {
         LevelTimer.TimerEnded += SlowTime;
         GameManager.LastGoal += SlowTime;
     }
+
+    #endregion
+
+    #region OnDisable
 
     private void OnDisable()
     {
@@ -27,6 +41,10 @@ public class TimeManager : MonoBehaviour
         GameManager.LastGoal -= SlowTime;
     }
 
+    #endregion
+
+    #region TimeControl
+    
     void SlowTime()
     {
         Time.fixedDeltaTime = _fixedDeltaTime;
@@ -44,5 +62,7 @@ public class TimeManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(2);
         Time.timeScale = 0;
     }
+    
+    #endregion
     
 }

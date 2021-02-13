@@ -6,13 +6,18 @@ using TMPro;
 
 public class UpdateEnemyScore : MonoBehaviour
 {
+    #region Fields
+
     private TextMeshProUGUI _enemyTextScore;
     private RectTransform _enemyTextRectTransform;
     
     [SerializeField] private Color _startColor;
     [SerializeField] private Color _animateColor;
 
-    // Start is called before the first frame update
+    #endregion
+
+    #region Initialization
+
     void Start()
     {
         _enemyTextScore = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
@@ -20,15 +25,27 @@ public class UpdateEnemyScore : MonoBehaviour
         if (GameManager.isBonusLevel) gameObject.SetActive(false);
     }
 
+    #endregion
+
+    #region OnEnable
+
     private void OnEnable()
     {
         GameManager.scoreChanged += ChangeScore;
     }
 
+    #endregion
+
+    #region OnDisable
+
     private void OnDisable()
     {
         GameManager.scoreChanged -= ChangeScore;
     }
+
+    #endregion
+
+    #region ChangeScore
 
     private void ChangeScore(bool winner, int score)
     {
@@ -36,9 +53,12 @@ public class UpdateEnemyScore : MonoBehaviour
         {
             _enemyTextScore.text = $"{score}";
             _enemyTextRectTransform.DOScale(1.4f, 0.1f);
-            _enemyTextScore.DOColor(_animateColor, 0.1f);
+            _enemyTextScore.DOColor(_animateColor, 0f);
             _enemyTextRectTransform.DOScale(1f, 0.5f);
-            _enemyTextScore.DOColor(_startColor, 1f);
+            _enemyTextScore.DOColor(_startColor, 3f);
         }
     }
+
+    #endregion
+    
 }
