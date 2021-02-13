@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
         _playerScore = _enemyScore = 0;
 
         //Set Points Require To Win
-        if(!isBonusLevel) LevelStarted?.Invoke(_requireToWin, isBonusLevel);
+        LevelStarted?.Invoke(_requireToWin, isBonusLevel);
         
     }
 
