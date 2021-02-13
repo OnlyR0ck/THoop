@@ -31,6 +31,7 @@ public class CameraController : MonoBehaviour
 
     void ShakeCamera(bool temp)
     {
+        Handheld.Vibrate();
         _mainCamera.DOShakeRotation(_shakeDuration, _shakePower, _vibrato, _randomness);
     }
 

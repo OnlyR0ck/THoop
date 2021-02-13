@@ -90,7 +90,13 @@ public class SceneController : MonoBehaviour
 
     public void LoadAnotherLevel()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void LoadMenu()
+    {
+        SceneManager.LoadSceneAsync(0);
+
     }
 
     #endregion
